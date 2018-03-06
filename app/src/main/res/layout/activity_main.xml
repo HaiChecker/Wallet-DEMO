@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="eos.hconline.com.eos_wallet.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/my_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/to_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_address"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:hint="to address" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/to_address"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:hint="number"
+            android:inputType="numberDecimal" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/num"
+            android:layout_centerHorizontal="true"
+            android:text="submit" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/submit"
+            android:layout_centerHorizontal="true"
+            android:text="create" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/create"
+            android:layout_centerHorizontal="true"
+            android:text="balance" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/test"
+            android:textColor="#000"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</RelativeLayout>
