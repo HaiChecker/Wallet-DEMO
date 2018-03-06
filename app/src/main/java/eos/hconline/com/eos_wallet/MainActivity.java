@@ -55,13 +55,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void changeEosx() {
         /**
-         * 加载合约，通过地址
+         * 加载合约，通过地址,创建合约实体类，此处地址为之前基于rinkeby网络提前发布的代币合约（EOSX）
          */
         eosx = Eosx.load("0x85ce1b8ad25F866783aa7d95F5d77E3b22CDd731", web3j,
                 credentials, BigInteger.valueOf(27000000000L), BigInteger.valueOf(250000));
     }
 
-
+    /**
+     * 初始化控件/点击事件
+     */
     private void initView() {
         progressDialog = new ProgressDialog(this);
 
@@ -86,14 +88,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         status_text = findViewById(R.id.status);
     }
 
+    /**
+     * Activity生命周期
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
         initView();
-        //RPC-JSON 初始化
+        //初始化web3对象
         web3j = Web3jFactory.build(new HttpService("https://rinkeby.infura.io/eosx"));
-
         //判断密钥文件是否存在，存在则禁用创建按钮
         if (eosFile.exists() && eosFile.listFiles().length > 0) {
             createWallet_btn.setEnabled(false);
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void call(Subscriber<? super Boolean> subscriber) {
                 try {
                     subscriber.onStart();
+                    //解锁钱包文件，获取凭证（解锁密码在代码中写死）
                     credentials = WalletUtils.loadCredentials("Shiwenping123", file);
                     if (credentials == null) {
                         subscriber.onError(new Exception("null"));
@@ -157,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 查询余额通过RxJava异步
+     * 查询余额通过RxJava异步，
      *
      * @return
      */
@@ -204,10 +210,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 获取用户键入的收款地址
+     * @return
+     */
     private String getRecv() {
         return recv_edt.getText().toString().trim();
     }
 
+    /**
+     * 获取用户键入的代币数量
+     * @return
+     */
     private Double getNum() {
         if (TextUtils.isEmpty(num_edt.getText().toString().trim())) {
             return 0.0;
@@ -216,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 交易
+     * 发起交易
      */
     private void transfer() {
         transferObs().subscribe(new BaseMySubscriber<TransactionReceipt>() {
@@ -228,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 交易  通过RxJava异步
+     * 交易  通过RxJava异步,避免主线程阻塞
      *
      * @return
      */
@@ -236,6 +250,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return eosx.transfer(getRecv(), BigInteger.valueOf((long) (getNum() * 100))).observable().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread());
     }
 
+    /**
+     * 导入私玥，通过RxJava异步导入
+     *
+     * @return
+     */
     private void importFunc() {
         importObs()
                 .subscribe(new BaseMySubscriber<Credentials>() {
@@ -251,8 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 导入私玥，通过RxJava异步导入
-     *
+     * 导入私玥的实现
      * @return
      */
     private Observable<Credentials> importObs() {
@@ -275,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 创建钱包（密码：Shiwenping123）
+     * 创建钱包异步（密码：Shiwenping123）
      *
      * @return
      */
@@ -299,6 +317,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .subscribeOn(Schedulers.newThread());
     }
 
+    /**
+     * 创建钱包
+     */
     private void create() {
         createObs()
                 .subscribe(new BaseMySubscriber<String>() {
@@ -310,6 +331,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    /**
+     * 查询余额
+     */
     private void balanceOf() {
         balanceOfObs()
                 .subscribe(new BaseMySubscriber<BigInteger>() {
